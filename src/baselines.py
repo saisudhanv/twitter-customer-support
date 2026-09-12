@@ -6,10 +6,9 @@ Baseline classifiers for evaluation.
 """
 
 import logging
-from typing import Tuple
+from typing import tuple
 
 import numpy as np
-import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
@@ -29,7 +28,7 @@ class TrivialBaseline:
         """
         self.majority_intent = majority_intent
     
-    def predict(self, text: str) -> Tuple[str, float]:
+    def predict(self, text: str) -> tuple[str, float]:
         """
         Predict intent (always returns majority).
         
@@ -79,7 +78,7 @@ class SimpleBaseline:
         
         logger.info(f"✓ Fitted on {len(texts)} examples")
     
-    def predict(self, text: str) -> Tuple[str, float]:
+    def predict(self, text: str) -> tuple[str, float]:
         """
         Predict intent.
         
@@ -105,14 +104,14 @@ class SimpleEscalationPolicy:
     """Simple rule-based escalation."""
     
     # High-risk keywords that should escalate
-    ESCALATE_KEYWORDS = {
+    ESCALATE_KEYWORDS = {  # noqa: RUF012
         "account", "password", "security", "fraud", "urgent", "angry",
         "court", "lawsuit", "lawyer", "refund", "money", "cancel",
         "delete", "damaged", "broken", "not working"
     }
     
     # Low-confidence intents should escalate
-    ESCALATE_INTENTS = {"other", "payment_issue"}
+    ESCALATE_INTENTS = {"other", "payment_issue"}  # noqa: RUF012
     
     @staticmethod
     def decide(
@@ -120,7 +119,7 @@ class SimpleEscalationPolicy:
         confidence: float,
         customer_text: str,
         min_confidence: float = 0.6,
-    ) -> Tuple[str, str]:
+    ) -> tuple[str, str]:
         """
         Decide whether to escalate.
         

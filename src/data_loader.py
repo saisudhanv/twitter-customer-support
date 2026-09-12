@@ -4,14 +4,13 @@ Data loader for customer support dataset.
 
 import logging
 from pathlib import Path
-from typing import Optional
 
 import pandas as pd
 
 logger = logging.getLogger(__name__)
 
 
-def load_raw_dataset(cache_dir: Optional[Path] = None, force_download: bool = False) -> pd.DataFrame:
+def load_raw_dataset(cache_dir: Path | None = None, force_download: bool = False) -> pd.DataFrame:
     """
     Load customer support dataset from Kaggle.
     

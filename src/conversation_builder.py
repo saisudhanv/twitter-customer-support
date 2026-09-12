@@ -5,7 +5,7 @@ Builds multi-turn conversations from tweets linked by in_response_to_tweet_id.
 """
 
 import logging
-from typing import Dict, List, Optional, Tuple
+from typing import Optional, dict, list, tuple
 
 import pandas as pd
 
@@ -14,7 +14,7 @@ from src.schemas import ConversationTurn, Message
 logger = logging.getLogger(__name__)
 
 
-def build_message_index(df: pd.DataFrame) -> Dict[str, dict]:
+def build_message_index(df: pd.DataFrame) -> dict[str, dict]:
     """
     Build an index mapping tweet_id to message data.
     
@@ -42,10 +42,10 @@ def build_message_index(df: pd.DataFrame) -> Dict[str, dict]:
 
 def get_conversation_thread(
     start_tweet_id: str,
-    message_index: Dict[str, dict],
+    message_index: dict[str, dict],
     include_previous: bool = True,
     include_subsequent: bool = True,
-) -> List[Tuple[str, dict]]:
+) -> list[tuple[str, dict]]:
     """
     Get all messages in a conversation thread linked to a tweet.
     
@@ -81,7 +81,7 @@ def get_conversation_thread(
     return sorted(thread.items(), key=lambda x: x[1]["created_at"])
 
 
-def find_customer_brand_pairs(df: pd.DataFrame, brand_name: str = "AmazonHelp") -> List[Dict]:
+def find_customer_brand_pairs(df: pd.DataFrame, brand_name: str = "AmazonHelp") -> list[dict]:
     """
     Find customer message + brand response pairs in the dataset.
     
@@ -126,7 +126,7 @@ def find_customer_brand_pairs(df: pd.DataFrame, brand_name: str = "AmazonHelp") 
     processed = 0
     
     for _, brand_msg in brand_msgs.iterrows():
-        processed += 1
+        processed += 1  # noqa: SIM113
         if processed % 50000 == 0:
             logger.info(f"  Processed {processed:,} brand messages...")
         
@@ -154,7 +154,8 @@ def find_customer_brand_pairs(df: pd.DataFrame, brand_name: str = "AmazonHelp") 
     return pairs
 
 
-def filter_usable_pairs(pairs: List[Dict], min_text_len: int = 10) -> List[Dict]:
+
+def filter_usable_pairs(pairs: list[dict], min_text_len: int = 10) -> list[dict]:
     """
     Filter pairs for usability.
     
@@ -200,9 +201,9 @@ def filter_usable_pairs(pairs: List[Dict], min_text_len: int = 10) -> List[Dict]
 def prepare_conversation_data(
     df: pd.DataFrame,
     brand_name: str = "AmazonHelp",
-    sample_size: Optional[int] = None,
+    sample_size: Optional[int] = None,  # noqa: F821
     seed: int = 42,
-) -> Tuple[pd.DataFrame, dict]:
+) -> tuple[pd.DataFrame, dict]:
     """
     Prepare conversation data for training and evaluation.
     
@@ -247,7 +248,7 @@ def prepare_conversation_data(
         "avg_brand_text_len": conversations_df["brand_text"].str.len().mean() if "brand_text" in conversations_df.columns else 0,
     }
     
-    logger.info(f"\nConversation Statistics:")
+    logger.info("\nConversation Statistics:")
     for key, val in stats.items():
         if isinstance(val, float):
             logger.info(f"  {key}: {val:.1f}")

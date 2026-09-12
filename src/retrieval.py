@@ -5,7 +5,6 @@ Simple implementation using TF-IDF similarity.
 """
 
 import logging
-from typing import List, Optional
 
 import numpy as np
 import pandas as pd
@@ -52,8 +51,8 @@ class SimpleRetrieval:
         self,
         query: str,
         top_k: int = 3,
-        exclude_ids: Optional[List[str]] = None,
-    ) -> List[dict]:
+        exclude_ids: list[str] | None = None,
+    ) -> list[dict]:
         """
         Retrieve top-k similar cases.
         

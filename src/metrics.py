@@ -5,10 +5,10 @@ Measures intent classification, escalation, and reply quality.
 """
 
 import logging
-from typing import Dict, List, Tuple
+from typing import dict, list
 
-import numpy as np
-import pandas as pd
+# import numpy as np
+# import pandas as pd
 from sklearn.metrics import (
     accuracy_score,
     confusion_matrix,
@@ -24,7 +24,7 @@ class IntentEvaluator:
     """Evaluate intent classification."""
     
     @staticmethod
-    def evaluate(predictions: List[str], references: List[str]) -> Dict:
+    def evaluate(predictions: list[str], references: list[str]) -> dict[str, object]:
         """
         Evaluate intent predictions.
         
@@ -75,7 +75,7 @@ class EscalationEvaluator:
     """Evaluate escalation decisions."""
     
     @staticmethod
-    def evaluate(predictions: List[str], references: List[str]) -> Dict:
+    def evaluate(predictions: list[str], references: list[str]) -> dict[str, object]:
         """
         Evaluate escalation decisions.
         
@@ -109,9 +109,9 @@ class EscalationEvaluator:
 
 
 def print_evaluation_summary(
-    system_metrics: Dict,
-    baseline1_metrics: Dict,
-    baseline2_metrics: Dict,
+    system_metrics: dict[str, object],
+    baseline1_metrics: dict[str, object],
+    baseline2_metrics: dict[str, object],
 ):
     """
     Print evaluation summary table.

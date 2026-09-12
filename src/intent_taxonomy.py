@@ -7,14 +7,14 @@ using keyword analysis and manual inspection rather than generic Banking77.
 
 import logging
 from collections import Counter
-from typing import Dict, List, Optional, Tuple
+from typing import dict, list, tuple
 
 import pandas as pd
 
 logger = logging.getLogger(__name__)
 
 
-def extract_keywords(text: str, min_len: int = 3) -> List[str]:
+def extract_keywords(text: str, min_len: int = 3) -> list[str]:
     """
     Extract keywords from text (simplified).
     
@@ -35,7 +35,8 @@ def extract_keywords(text: str, min_len: int = 3) -> List[str]:
     return keywords
 
 
-def analyze_intent_patterns(conversations_df: pd.DataFrame, sample_size: int = 100) -> Dict:
+
+def analyze_intent_patterns(conversations_df: pd.DataFrame, sample_size: int = 100) -> dict[str, object]:
     """
     Analyze patterns in customer messages to discover intents.
     
@@ -66,7 +67,7 @@ def analyze_intent_patterns(conversations_df: pd.DataFrame, sample_size: int = 1
     keyword_counts = Counter(all_keywords)
     top_keywords = keyword_counts.most_common(30)
     
-    logger.info(f"\nTop 30 keywords in customer messages:")
+    logger.info("\nTop 30 keywords in customer messages:")
     for keyword, count in top_keywords:
         logger.info(f"  {keyword}: {count}")
     
@@ -76,7 +77,7 @@ def analyze_intent_patterns(conversations_df: pd.DataFrame, sample_size: int = 1
     }
 
 
-def create_default_taxonomy() -> Dict[str, Dict]:
+def create_default_taxonomy() -> dict[str, dict]:
     """
     Create a default intent taxonomy for AmazonHelp based on domain knowledge.
     
@@ -141,7 +142,8 @@ def create_default_taxonomy() -> Dict[str, Dict]:
     return taxonomy
 
 
-def classify_by_keywords(text: str, taxonomy: Dict[str, Dict]) -> Tuple[str, float]:
+
+def classify_by_keywords(text: str, taxonomy: dict[str, dict]) -> tuple[str, float]:
     """
     Classify text to an intent using keyword matching.
     
@@ -181,7 +183,7 @@ def classify_by_keywords(text: str, taxonomy: Dict[str, Dict]) -> Tuple[str, flo
 
 def label_conversations(
     conversations_df: pd.DataFrame,
-    taxonomy: Dict[str, Dict],
+    taxonomy: dict[str, dict],
 ) -> pd.DataFrame:
     """
     Label conversations with intents.
@@ -213,7 +215,8 @@ def label_conversations(
     return conversations_df
 
 
-def print_taxonomy(taxonomy: Dict[str, Dict]):
+
+def print_taxonomy(taxonomy: dict[str, dict]):
     """Print taxonomy in readable format."""
     logger.info("\n" + "=" * 80)
     logger.info("INTENT TAXONOMY")

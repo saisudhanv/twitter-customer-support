@@ -5,14 +5,18 @@ Combines classification, retrieval, generation, and escalation decisions.
 """
 
 import logging
-from typing import Optional
 
 import pandas as pd
 
 from src.baselines import SimpleEscalationPolicy
 from src.intent_taxonomy import classify_by_keywords, create_default_taxonomy
 from src.retrieval import SimpleRetrieval
-from src.schemas import AgentOutput, EscalationDecision, PredictedIntent, RetrievalResult
+from src.schemas import (
+    AgentOutput,
+    EscalationDecision,
+    PredictedIntent,
+    RetrievalResult,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +45,7 @@ class SupportAgent:
     def process(
         self,
         customer_message: str,
-        exclude_tweet_ids: Optional[list] = None,
+        exclude_tweet_ids: list | None = None,
     ) -> AgentOutput:
         """
         Process a customer message end-to-end.

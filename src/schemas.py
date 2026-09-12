@@ -7,7 +7,7 @@ Defines Pydantic models for structured data throughout the pipeline.
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -19,7 +19,7 @@ class Message(BaseModel):
     author_id: str
     text: str
     created_at: datetime
-    in_response_to_tweet_id: Optional[str] = None
+    in_response_to_tweet_id: str | None = None
     is_brand: bool  # True if from brand, False if from customer
 
 
@@ -29,11 +29,11 @@ class ConversationTurn(BaseModel):
     turn_id: str
     conversation_id: str
     customer_message: Message
-    customer_context: List[Message] = Field(default_factory=list)  # Previous customer messages
-    brand_response: Optional[Message] = None
-    brand_response_context: List[Message] = Field(default_factory=list)  # Previous brand responses
+    customer_context: list[Message] = Field(default_factory=list)  # Previous customer messages
+    brand_response: Message | None = None
+    brand_response_context: list[Message] = Field(default_factory=list)  # Previous brand responses
     timestamp: datetime
-    source_tweets: List[str] = Field(default_factory=list)  # Original tweet IDs
+    source_tweets: list[str] = Field(default_factory=list)  # Original tweet IDs
 
 
 class IntentDefinition(BaseModel):
@@ -44,7 +44,7 @@ class IntentDefinition(BaseModel):
     description: str
     inclusion_criteria: str
     exclusion_criteria: str
-    examples: List[str] = Field(default_factory=list)
+    examples: list[str] = Field(default_factory=list)
 
 
 class PredictedIntent(BaseModel):
@@ -52,7 +52,7 @@ class PredictedIntent(BaseModel):
 
     intent_id: str
     confidence: float = Field(ge=0.0, le=1.0)
-    reasoning: Optional[str] = None
+    reasoning: str | None = None
 
 
 class RetrievalResult(BaseModel):
@@ -80,8 +80,8 @@ class AgentOutput(BaseModel):
     reply: str
     decision: EscalationDecision
     escalation_reason: str
-    evidence: List[RetrievalResult] = Field(default_factory=list)
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    evidence: list[RetrievalResult] = Field(default_factory=list)
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 class GoldenExample(BaseModel):
@@ -94,9 +94,9 @@ class GoldenExample(BaseModel):
     gold_intent: str
     gold_escalation: EscalationDecision
     gold_escalation_reason: str
-    gold_reference_response: Optional[str] = None
-    acceptable_response_criteria: Optional[str] = None
-    notes: Optional[str] = None
+    gold_reference_response: str | None = None
+    acceptable_response_criteria: str | None = None
+    notes: str | None = None
 
 
 class EvaluationResult(BaseModel):
@@ -110,9 +110,9 @@ class EvaluationResult(BaseModel):
     gold_escalation: EscalationDecision
     escalation_correct: bool
     predicted_reply: str
-    reply_quality_score: Optional[float] = None
-    reply_quality_reasoning: Optional[str] = None
-    metrics: Dict[str, Any] = Field(default_factory=dict)
+    reply_quality_score: float | None = None
+    reply_quality_reasoning: str | None = None
+    metrics: dict[str, Any] = Field(default_factory=dict)
 
 
 @dataclass
@@ -126,5 +126,5 @@ class DatasetStatistics:
     unique_intents: int
     avg_conversation_length: float
     date_range: tuple  # (min_date, max_date)
-    missing_data_counts: Dict[str, int] = field(default_factory=dict)
-    notes: List[str] = field(default_factory=list)
+    missing_data_counts: dict[str, int] = field(default_factory=dict)
+    notes: list[str] = field(default_factory=list)
