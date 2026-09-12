@@ -98,7 +98,7 @@ def create_labeling_template(golden_df: pd.DataFrame, output_path: Path):
     
     template_df.to_csv(output_path, index=False)
     logger.info(f"✓ Labeling template saved to {output_path}")
-    logger.info(f"\nInstructions for labeling:")
+    logger.info("\nInstructions for labeling:")
     logger.info("1. Review customer_text and brand_text")
     logger.info("2. Fill gold_intent (use the intents from intent_taxonomy.txt)")
     logger.info("3. Fill gold_escalation: 'AUTO_HANDLE' or 'ESCALATE'")

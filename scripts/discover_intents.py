@@ -39,7 +39,7 @@ def main():
     
     # Analyze patterns
     logger.info("\n2. Analyzing intent patterns...")
-    patterns = analyze_intent_patterns(conversations_df, sample_size=200)
+    analyze_intent_patterns(conversations_df, sample_size=200)
     
     # Create taxonomy
     logger.info("\n3. Creating intent taxonomy...")

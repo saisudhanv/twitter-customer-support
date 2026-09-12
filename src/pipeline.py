@@ -9,7 +9,9 @@ import logging
 import pandas as pd
 
 from src.baselines import SimpleEscalationPolicy
+from src.config import get_config
 from src.intent_taxonomy import classify_by_keywords, create_default_taxonomy
+from src.llm import GeminiClient, LLMError
 from src.retrieval import SimpleRetrieval
 from src.schemas import (
     AgentOutput,
@@ -29,6 +31,10 @@ class SupportAgent:
         self.taxonomy = create_default_taxonomy()
         self.retrieval = SimpleRetrieval()
         self.is_ready = False
+        self.llm = None
+        config = get_config()
+        if config.llm_provider.lower() == "gemini" and config.gemini_api_key:
+            self.llm = GeminiClient(config)
     
     def index_cases(self, cases_df: pd.DataFrame):
         """
@@ -89,11 +95,14 @@ class SupportAgent:
             for i, r in enumerate(retrieved)
         ]
         
-        # 3. Generate reply (simple: use most similar case)
-        if retrieved:
-            reply = f"Based on similar cases: {retrieved[0]['brand_response'][:200]}"
-        else:
-            reply = "I'd be happy to help. Could you provide more details?"
+        # 3. Generate a grounded reply, keeping retrieval as a local fallback.
+        reply = self._fallback_reply(retrieved)
+        if self.llm:
+            prompt = self._reply_prompt(customer_message, retrieved)
+            try:
+                reply = self.llm.generate(prompt)
+            except LLMError as exc:
+                logger.warning("Gemini reply generation failed; using fallback: %s", exc)
         
         # 4. Make escalation decision
         decision_str, escalation_reason = SimpleEscalationPolicy.decide(
@@ -117,4 +126,24 @@ class SupportAgent:
             decision=decision,
             escalation_reason=escalation_reason,
             evidence=evidence
+        )
+
+    @staticmethod
+    def _fallback_reply(retrieved: list[dict]) -> str:
+        if retrieved:
+            return f"Based on similar cases: {retrieved[0]['brand_response'][:200]}"
+        return "I'd be happy to help. Could you provide more details?"
+
+    @staticmethod
+    def _reply_prompt(customer_message: str, retrieved: list[dict]) -> str:
+        examples = "\n".join(
+            f"Customer: {item['customer_message'][:500]}\nSupport: {item['brand_response'][:500]}"
+            for item in retrieved
+        )
+        return (
+            "You are a concise, empathetic customer support agent. Answer the customer's message "
+            "using the relevant examples below. Do not invent policies, refunds, order status, or "
+            "account actions. If the examples do not provide enough information, ask one useful "
+            "clarifying question. Return only the reply text.\n\n"
+            f"Customer message: {customer_message}\n\nRelevant examples:\n{examples}"
         )

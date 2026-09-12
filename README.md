@@ -139,8 +139,12 @@ These are the results from the manually labeled `golden_set.csv`, after removing
 Edit `.env` to customize:
 
 ```bash
-# LLM Provider (openai, anthropic, ollama)
-LLM_PROVIDER=openai
+# LLM Provider (gemini, openai, anthropic, ollama)
+LLM_PROVIDER=gemini
+GEMINI_API_KEY=your-gemini-api-key
+GEMINI_MODEL=gemini-3.6-flash
+
+# OpenAI alternative
 OPENAI_API_KEY=sk-...
 OPENAI_MODEL=gpt-4-turbo
 

@@ -61,7 +61,7 @@ def analyze_dataset():
     logger.info("\n3. Analyzing brand candidates...")
     brand_candidates = inspect_brands(df, min_conversations=100)
     
-    logger.info(f"\nTop 10 brands by tweet count:")
+    logger.info("\nTop 10 brands by tweet count:")
     print("\n" + brand_candidates.head(10)[["brand_name", "total_brand_tweets", "total_customer_messages"]].to_string())
     
     # Save candidates report

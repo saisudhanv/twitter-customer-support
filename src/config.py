@@ -20,9 +20,9 @@ class Config(BaseModel):
     random_seed: int = Field(default=42, description="Random seed for reproducibility")
 
     # LLM Configuration
-    llm_provider: str = Field(default="openai", description="LLM provider: openai, anthropic, or ollama")
+    llm_provider: str = Field(default="openai", description="LLM provider: gemini, openai, anthropic, or ollama")
     gemini_api_key: str | None = Field(default=None, description="Gemini API key")
-    gemini_model: str = Field(default="gpt-4o-mini", description="Gemini model")
+    gemini_model: str = Field(default="gemini-3.6-flash", description="Gemini model")
     openai_api_key: str | None = Field(default=None, description="OpenAI API key")
     openai_model: str = Field(default="gpt-4-turbo", description="OpenAI model")
     anthropic_api_key: str | None = Field(default=None, description="Anthropic API key")
@@ -78,6 +78,8 @@ def load_config() -> Config:
         "verbose": os.getenv("VERBOSE", "true").lower() == "true",
         "random_seed": int(os.getenv("RANDOM_SEED", "42")),
         "llm_provider": os.getenv("LLM_PROVIDER", "openai"),
+        "gemini_api_key": os.getenv("GEMINI_API_KEY"),
+        "gemini_model": os.getenv("GEMINI_MODEL", "gemini-3.6-flash"),
         "openai_api_key": os.getenv("OPENAI_API_KEY"),
         "openai_model": os.getenv("OPENAI_MODEL", "gpt-4-turbo"),
         "anthropic_api_key": os.getenv("ANTHROPIC_API_KEY"),
